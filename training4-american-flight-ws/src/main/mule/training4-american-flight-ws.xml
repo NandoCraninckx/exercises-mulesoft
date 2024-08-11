@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="getFlights" doc:id="8a49da67-05a9-4a11-9716-8e38018793eb" >
+		<db:select doc:name="Select" doc:id="3e21ebf7-036a-47e0-9772-b51ae57a5e18" config-ref="Database_Config">
+			<db:sql ><![CDATA[select *
+from american]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="e87bde92-1baa-43f4-bcfa-a0e8f7ccb32d">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	ID: payload01.ID,
+	code: (payload01.code1 default "") ++ (payload01.code2 default ""),
+	price: payload01.price default 0,
+	departureDate: payload01.takeOffDate as String default "",
+	origin: trim ( payload01.fromAirport default "" ),
+	destination: payload01.toAirport default "",
+	emptySeats: payload01.seatsAvailable default 0,
+	plane: {
+		"type": payload01.planeType default "",
+		totalSeats: payload01.totalSeats default 0
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getFlightsById" doc:id="c14f77a7-eba3-4afc-aede-c3ef163e4002" >
+		<db:select doc:name="Select" doc:id="ea6793c2-4299-4e7d-869c-f6d20b21d6a6" config-ref="Database_Config" >
+			<db:sql ><![CDATA[select *
+from american
+where id = :ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'ID' : attributes.uriParams.ID}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="fb7f087a-35f1-44b3-9fa3-b580df07a51d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	ID: payload01.ID,
+	code: (payload01.code1 default "") ++ (payload01.code2 default ""),
+	price: payload01.price default 0,
+	departureDate: payload01.takeOffDate as String default "",
+	origin: trim ( payload01.fromAirport default "" ),
+	destination: payload01.toAirport default "",
+	emptySeats: payload01.seatsAvailable default 0,
+	plane: {
+		"type": payload01.planeType default "",
+		totalSeats: payload01.totalSeats default 0
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

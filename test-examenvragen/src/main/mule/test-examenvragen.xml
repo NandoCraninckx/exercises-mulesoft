@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<flow name="test-examenvragenFlow" doc:id="5b125109-adfa-417c-870f-61a6b546f370" >
+		<http:listener doc:name="Listener" doc:id="418a52f9-702f-4eee-abab-29f531f60cfc" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value="MAIN" doc:name="Set Payload" doc:id="5d3e3874-95b2-436f-90b7-e5b1dc2d6b08" />
+		<ee:transform doc:name="Transform Message" doc:id="3159d297-c5f2-4d3c-80b6-980ca2e0255d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+---
+"RESPONSE" ++ payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7c3adffc-a4d2-4156-abb3-03dc188d0d81" type="HTTP:NOT_FOUND">
+				<set-payload value="#['ssdssd']" doc:name="Set Payload" doc:id="3b6dd9e8-eb51-40d6-87ed-af0d2d3bd644" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	
+	<flow name="test-examenvragenFlow1" doc:id="8c90b0ba-a7ec-43b2-9309-90a3cf39bba9" >
+		<http:listener doc:name="Listener" doc:id="65d8936a-8834-4c91-9115-7e59cec5a113" config-ref="HTTP_Listener_config" path="/test1"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="994af190-fcf9-4002-ba6e-daeae5529ce1" />
+		<validation:is-number doc:name="payload" doc:id="f1175907-2b5b-4052-9f63-51573f4a5d20" value="#[payload]" numberType="INTEGER" message="#['validate']"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="fc23ee3d-cb93-4bea-805d-8d6368e3e5b8" />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="768d0633-94e1-4947-88ae-46fccd2ea4c0" >
+				<set-payload value="#['error main flow']" doc:name="Set Payload" doc:id="c2f25ad9-193d-441d-a2d2-34c750b59aaf" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

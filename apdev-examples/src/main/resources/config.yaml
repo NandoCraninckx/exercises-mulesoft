@@ -1,0 +1,16 @@
+http:
+  port: "8081"
+  
+sfdc:
+  username: "nando@dotsandarrows.be"
+  token: "y0nbiWGZBn4nI0hcuqOjMKvI"
+  
+file:
+  accountsDir: "/Users/nando/Downloads/CDEV-DEX401-EN-07Jun2024-Student-Files_SP-2/resources"
+  
+db:
+  host: "mudb.mule-training.com"
+  port: "3306"
+  user: "mule"
+  password: "mule"
+  database: "training"

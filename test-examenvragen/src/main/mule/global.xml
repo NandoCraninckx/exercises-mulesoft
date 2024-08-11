@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b4019628-721b-4cd3-a992-5254d3d790f9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<configuration doc:name="Configuration" doc:id="c6928471-2e0e-499c-a125-147e6d59b345" defaultErrorHandler-ref="globalError_Handler" />
+	<error-handler name="globalError_Handler" doc:id="5fe45eec-86f3-42e8-a0ac-e5fcd7b8c172" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="be4b2f21-0164-4fbd-97e7-e7fea9511eb2" >
+			<set-payload value='#["global error handler"]' doc:name="Set Payload" doc:id="3fe3a1c6-5339-4ddb-ad23-464cda81ebcb" />
+		</on-error-continue>
+	</error-handler>
+</mule>

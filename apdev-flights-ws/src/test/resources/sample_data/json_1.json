@@ -1,0 +1,15 @@
+{
+  "flights": {
+    "": {
+      "airline": "incididunt",
+      "flightCode": "sed",
+      "fromAirportCode": "voluptatem",
+      "toAirportCode": "Lorem",
+      "departureDate": "",
+      "emptySeats": 20,
+      "totalSeats": 28,
+      "price": 74.3,
+      "planeType": "reprehenderit"
+    }
+  }
+}
